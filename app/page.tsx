@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { Dropzone, type UploadedFile } from "@/components/dropzone";
 import { DataTable } from "@/components/data-table";
 import { ExportButton } from "@/components/export-button";
@@ -16,7 +17,6 @@ export default function HomePage() {
     const [isProcessing, setIsProcessing] = useState(false);
 
     const processFile = useCallback(async (uploadedFile: UploadedFile) => {
-        // Update status to reading
         setFiles((prev) =>
             prev.map((f) =>
                 f.id === uploadedFile.id ? { ...f, status: "reading" as const } : f
@@ -25,28 +25,22 @@ export default function HomePage() {
 
         await new Promise((resolve) => setTimeout(resolve, 300));
 
-        // Update status to extracting
         setFiles((prev) =>
             prev.map((f) =>
                 f.id === uploadedFile.id ? { ...f, status: "extracting" as const } : f
             )
         );
 
-        // Create FormData and parse
         const formData = new FormData();
         formData.append("file", uploadedFile.file);
 
         const result = await parseDocument(formData);
 
         if (result.success && result.data) {
-            // Merge new data with existing
             setExtractedData((prev) => {
                 if (!prev) return result.data!;
-
-                // Merge rows and columns
                 const allColumns = [...new Set([...prev.columns, ...result.data!.columns])];
                 const allRows = [...prev.rows, ...result.data!.rows];
-
                 return {
                     ...result.data!,
                     columns: allColumns,
@@ -131,9 +125,17 @@ export default function HomePage() {
                             </div>
                             <span className="text-xl font-bold gradient-text">FreightSnap</span>
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-zinc-500">
-                            <Sparkles className="w-4 h-4" />
-                            <span>AI-Powered Data Extraction</span>
+                        <div className="flex items-center gap-4">
+                            <Link
+                                href="/about"
+                                className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
+                            >
+                                About
+                            </Link>
+                            <div className="flex items-center gap-2 text-sm text-zinc-500">
+                                <Sparkles className="w-4 h-4" />
+                                <span>AI-Powered</span>
+                            </div>
                         </div>
                     </div>
                 </header>
