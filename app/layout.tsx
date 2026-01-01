@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { ToastProvider } from "@/components/toast";
 
-const inter = Inter({
+const spaceGrotesk = Space_Grotesk({
     subsets: ["latin"],
     display: "swap",
-    variable: "--font-inter",
+    variable: "--font-space",
 });
 
 export const metadata: Metadata = {
@@ -24,7 +24,7 @@ export default function RootLayout({
     return (
         <html lang="en" className="dark" suppressHydrationWarning>
             <body
-                className={`${inter.variable} font-sans antialiased bg-background text-foreground min-h-screen`}
+                className={`${spaceGrotesk.variable} font-sans antialiased bg-background text-foreground min-h-screen`}
                 suppressHydrationWarning
             >
                 <ToastProvider>{children}</ToastProvider>

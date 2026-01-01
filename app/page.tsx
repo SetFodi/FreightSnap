@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/toast";
 import { UsageBadge, incrementUsage, canProcessFile } from "@/components/usage-badge";
 import { parseDocument } from "@/app/actions/parse-pdf";
-import { Zap, FileSpreadsheet, Sparkles, Trash2 } from "lucide-react";
+import { Package, FileSpreadsheet, Sparkles, Trash2 } from "lucide-react";
 import type { ExtractedData } from "@/lib/gemini";
 
 export default function HomePage() {
@@ -149,7 +149,7 @@ export default function HomePage() {
                     <div className="container mx-auto px-6 py-4 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <div className="p-2 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20">
-                                <Zap className="w-5 h-5 text-primary" />
+                                <Package className="w-5 h-5 text-primary" />
                             </div>
                             <span className="text-xl font-bold gradient-text">FreightSnap</span>
                         </div>
@@ -166,6 +166,12 @@ export default function HomePage() {
                                 className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
                             >
                                 Pricing
+                            </Link>
+                            <Link
+                                href="/privacy"
+                                className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
+                            >
+                                Privacy
                             </Link>
                             <div className="hidden sm:flex items-center gap-2 text-sm text-zinc-500">
                                 <Sparkles className="w-4 h-4" />

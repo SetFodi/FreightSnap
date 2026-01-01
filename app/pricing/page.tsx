@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Zap, Check, ArrowLeft, Star } from "lucide-react";
+import { Package, Check, ArrowLeft, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GlassContainer } from "@/components/glass-container";
 import { cn } from "@/lib/utils";
@@ -74,7 +74,7 @@ export default function PricingPage() {
                     <div className="container mx-auto px-6 py-4 flex items-center justify-between">
                         <Link href="/" className="flex items-center gap-3 group">
                             <div className="p-2 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20">
-                                <Zap className="w-5 h-5 text-primary" />
+                                <Package className="w-5 h-5 text-primary" />
                             </div>
                             <span className="text-xl font-bold gradient-text">FreightSnap</span>
                         </Link>

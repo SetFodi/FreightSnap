@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import {
     Shield,
-    Zap,
+    Package,
     FileSpreadsheet,
     Lock,
     Trash2,
@@ -23,7 +23,7 @@ const features = [
         description: "PDF, CSV, XLS, XLSX - drop any document and get clean, structured data.",
     },
     {
-        icon: Zap,
+        icon: Package,
         title: "Instant Processing",
         description: "Spreadsheets parse locally in milliseconds. Zero wait time for structured files.",
     },
@@ -70,7 +70,7 @@ export default function AboutPage() {
                     <div className="container mx-auto px-6 py-4 flex items-center justify-between">
                         <Link href="/" className="flex items-center gap-3 group">
                             <div className="p-2 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20">
-                                <Zap className="w-5 h-5 text-primary" />
+                                <Package className="w-5 h-5 text-primary" />
                             </div>
                             <span className="text-xl font-bold gradient-text">FreightSnap</span>
                         </Link>
