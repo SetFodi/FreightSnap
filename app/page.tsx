@@ -10,19 +10,22 @@ import { GlassContainer } from "@/components/glass-container";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/toast";
 import { UsageBadge, incrementUsage, canProcessFile } from "@/components/usage-badge";
+import { LicenseModal, useProStatus, ProBadge } from "@/components/license-modal";
 import { parseDocument } from "@/app/actions/parse-pdf";
-import { Package, FileSpreadsheet, Sparkles, Trash2 } from "lucide-react";
+import { Package, FileSpreadsheet, Sparkles, Trash2, Crown } from "lucide-react";
 import type { ExtractedData } from "@/lib/gemini";
 
 export default function HomePage() {
     const [files, setFiles] = useState<UploadedFile[]>([]);
     const [extractedData, setExtractedData] = useState<ExtractedData | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
+    const [showLicenseModal, setShowLicenseModal] = useState(false);
     const { addToast } = useToast();
+    const { isPro, refresh: refreshProStatus } = useProStatus();
 
     const processFile = useCallback(async (uploadedFile: UploadedFile) => {
-        // Check usage limit
-        if (!canProcessFile()) {
+        // Check usage limit (skip for Pro users)
+        if (!isPro && !canProcessFile()) {
             setFiles((prev) =>
                 prev.map((f) =>
                     f.id === uploadedFile.id
@@ -54,7 +57,7 @@ export default function HomePage() {
         const result = await parseDocument(formData);
 
         if (result.success && result.data) {
-            incrementUsage(); // Track successful processing
+            if (!isPro) incrementUsage(); // Track usage for non-Pro users
 
             setExtractedData((prev) => {
                 if (!prev) return result.data!;
@@ -88,7 +91,7 @@ export default function HomePage() {
             );
             addToast("error", result.error || "Failed to process file");
         }
-    }, [addToast]);
+    }, [addToast, isPro]);
 
     const handleFilesAdded = useCallback(
         async (newFiles: File[]) => {
@@ -152,9 +155,19 @@ export default function HomePage() {
                                 <Package className="w-5 h-5 text-primary" />
                             </div>
                             <span className="text-xl font-bold gradient-text">FreightSnap</span>
+                            {isPro && <ProBadge />}
                         </div>
                         <div className="flex items-center gap-4">
-                            <UsageBadge />
+                            {!isPro && <UsageBadge />}
+                            {!isPro && (
+                                <button
+                                    onClick={() => setShowLicenseModal(true)}
+                                    className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30 text-amber-400 text-xs font-medium hover:from-amber-500/30 hover:to-orange-500/30 transition-colors"
+                                >
+                                    <Crown className="w-3.5 h-3.5" />
+                                    Upgrade
+                                </button>
+                            )}
                             <Link
                                 href="/about"
                                 className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
@@ -247,7 +260,11 @@ export default function HomePage() {
                                             Clear All
                                         </Button>
                                     </div>
-                                    <ExportButton data={extractedData} disabled={isProcessing} />
+                                    <ExportButton
+                                        data={extractedData}
+                                        disabled={isProcessing}
+                                        onUpgradeClick={() => setShowLicenseModal(true)}
+                                    />
                                 </motion.div>
                             )}
                         </div>
@@ -258,6 +275,16 @@ export default function HomePage() {
                     <p>Built with Next.js 15, Tailwind CSS &amp; Groq AI • 100% Private</p>
                 </footer>
             </div>
+
+            {/* License Modal */}
+            <LicenseModal
+                isOpen={showLicenseModal}
+                onClose={() => setShowLicenseModal(false)}
+                onSuccess={() => {
+                    refreshProStatus();
+                    addToast("success", "Welcome to FreightSnap Pro! 🎉");
+                }}
+            />
         </div>
     );
 }

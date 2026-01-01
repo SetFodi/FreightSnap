@@ -1,11 +1,14 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Package, Check, ArrowLeft, Star } from "lucide-react";
+import { Package, Check, ArrowLeft, Crown, Sparkles, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GlassContainer } from "@/components/glass-container";
 import { cn } from "@/lib/utils";
+
+const PRO_STORAGE_KEY = "freightsnap_pro";
 
 const plans = [
     {
@@ -25,43 +28,34 @@ const plans = [
         popular: false,
     },
     {
-        name: "Pro",
-        price: "$29",
-        period: "/month",
-        description: "For busy logistics teams",
+        name: "Pro Lifetime",
+        price: "$20",
+        originalPrice: "$29",
+        period: "one-time",
+        description: "Pay once, use forever",
         features: [
-            "Unlimited files",
             "Everything in Free",
+            "Unlimited file processing",
             "QuickBooks export",
             "Xero export",
-            "Currency conversion",
             "Priority processing",
-            "Email support",
+            "Lifetime updates",
         ],
-        cta: "Start Free Trial",
-        href: "/",
+        cta: "Get Pro - Save $9",
+        href: "https://freightsnap.gumroad.com/l/uygsqg/andromeda",
         popular: true,
-    },
-    {
-        name: "Enterprise",
-        price: "$299",
-        period: "one-time",
-        description: "Custom integration",
-        features: [
-            "Everything in Pro",
-            "API access",
-            "Custom export templates",
-            "Direct database integration",
-            "Dedicated support",
-            "Custom AI training",
-        ],
-        cta: "Contact Us",
-        href: "mailto:hello@freightsnap.com",
-        popular: false,
     },
 ];
 
 export default function PricingPage() {
+    const [isPro, setIsPro] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+        setIsPro(localStorage.getItem(PRO_STORAGE_KEY) === "true");
+    }, []);
+
     return (
         <div className="min-h-screen bg-background">
             {/* Background */}
@@ -88,6 +82,22 @@ export default function PricingPage() {
                     </div>
                 </header>
 
+                {/* Pro Status Banner */}
+                {mounted && isPro && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 border-b border-amber-500/20"
+                    >
+                        <div className="container mx-auto px-6 py-3 flex items-center justify-center gap-2">
+                            <Crown className="w-4 h-4 text-amber-400" />
+                            <span className="text-sm text-amber-300 font-medium">
+                                You have Pro access! Enjoy unlimited features.
+                            </span>
+                        </div>
+                    </motion.div>
+                )}
+
                 {/* Hero */}
                 <section className="container mx-auto px-6 py-16 text-center">
                     <motion.div
@@ -98,15 +108,36 @@ export default function PricingPage() {
                         <h1 className="text-4xl md:text-5xl font-bold text-zinc-100 mb-4">
                             Simple, <span className="gradient-text">Transparent</span> Pricing
                         </h1>
-                        <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-                            Start free. Upgrade when you need more power. No hidden fees.
+                        <p className="text-lg text-zinc-400 max-w-2xl mx-auto mb-6">
+                            Start free. Upgrade when you need more power. No subscriptions.
                         </p>
+
+                        {/* Discount Banner */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30"
+                        >
+                            <motion.div
+                                animate={{ rotate: [0, 10, -10, 0] }}
+                                transition={{ repeat: Infinity, duration: 2, repeatDelay: 3 }}
+                            >
+                                <Sparkles className="w-4 h-4 text-green-400" />
+                            </motion.div>
+                            <span className="text-sm text-green-300">
+                                Launch offer: <span className="font-bold">Save $9</span> with code{" "}
+                                <code className="px-1.5 py-0.5 rounded bg-green-500/20 text-green-200 font-mono text-xs">
+                                    ANDROMEDA
+                                </code>
+                            </span>
+                        </motion.div>
                     </motion.div>
                 </section>
 
                 {/* Pricing Cards */}
                 <section className="container mx-auto px-6 pb-24">
-                    <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                    <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
                         {plans.map((plan, index) => (
                             <motion.div
                                 key={plan.name}
@@ -124,25 +155,44 @@ export default function PricingPage() {
                                     {/* Popular badge */}
                                     {plan.popular && (
                                         <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                                            <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs font-medium">
-                                                <Star className="w-3 h-3" />
-                                                Most Popular
-                                            </div>
+                                            <motion.div
+                                                animate={{ y: [0, -3, 0] }}
+                                                transition={{ repeat: Infinity, duration: 2 }}
+                                                className="flex items-center gap-1 px-3 py-1 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-medium shadow-lg shadow-orange-500/30"
+                                            >
+                                                <Zap className="w-3 h-3" />
+                                                Best Value
+                                            </motion.div>
                                         </div>
                                     )}
 
                                     {/* Plan header */}
-                                    <div className="mb-6">
+                                    <div className="mb-6 pt-2">
                                         <h3 className="text-lg font-semibold text-zinc-100 mb-1">
                                             {plan.name}
                                         </h3>
                                         <p className="text-sm text-zinc-500 mb-4">{plan.description}</p>
-                                        <div className="flex items-baseline gap-1">
+                                        <div className="flex items-baseline gap-2">
                                             <span className="text-4xl font-bold text-zinc-100">
                                                 {plan.price}
                                             </span>
+                                            {plan.originalPrice && (
+                                                <span className="text-lg text-zinc-500 line-through">
+                                                    {plan.originalPrice}
+                                                </span>
+                                            )}
                                             <span className="text-zinc-500">{plan.period}</span>
                                         </div>
+                                        {plan.originalPrice && (
+                                            <motion.p
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                transition={{ delay: 0.5 }}
+                                                className="text-sm text-green-400 mt-1"
+                                            >
+                                                You save $9 with launch discount!
+                                            </motion.p>
+                                        )}
                                     </div>
 
                                     {/* Features */}
@@ -156,13 +206,27 @@ export default function PricingPage() {
                                     </ul>
 
                                     {/* CTA */}
-                                    <Button
-                                        asChild
-                                        variant={plan.popular ? "default" : "outline"}
-                                        className="w-full"
-                                    >
-                                        <Link href={plan.href}>{plan.cta}</Link>
-                                    </Button>
+                                    {plan.popular && mounted && isPro ? (
+                                        <div className="w-full py-3 text-center rounded-lg bg-green-500/10 border border-green-500/30">
+                                            <span className="flex items-center justify-center gap-2 text-green-400 font-medium">
+                                                <Crown className="w-4 h-4" />
+                                                You have Pro!
+                                            </span>
+                                        </div>
+                                    ) : (
+                                        <Button
+                                            asChild
+                                            variant={plan.popular ? "default" : "outline"}
+                                            className={cn(
+                                                "w-full",
+                                                plan.popular && "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 shadow-lg shadow-orange-500/20"
+                                            )}
+                                        >
+                                            <a href={plan.href} target={plan.popular ? "_blank" : undefined} rel="noopener noreferrer">
+                                                {plan.cta}
+                                            </a>
+                                        </Button>
+                                    )}
                                 </GlassContainer>
                             </motion.div>
                         ))}
@@ -181,8 +245,8 @@ export default function PricingPage() {
                                 a: "Yes. Files are processed in memory and immediately discarded. We use Groq API which does NOT train on your data.",
                             },
                             {
-                                q: "Can I cancel anytime?",
-                                a: "Absolutely. No contracts, no commitments. Cancel with one click.",
+                                q: "What does 'Lifetime' mean?",
+                                a: "Pay once, use forever. No monthly fees, no subscriptions. All future updates included.",
                             },
                             {
                                 q: "What file formats are supported?",

@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Download, Check, FileSpreadsheet, FileText, X, Building2 } from "lucide-react";
+import { Download, Check, FileSpreadsheet, FileText, X, Building2, Lock, Crown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { ExtractedData } from "@/lib/gemini";
 import * as XLSX from "xlsx";
@@ -11,6 +11,7 @@ import * as XLSX from "xlsx";
 interface ExportButtonProps {
     data: ExtractedData | null;
     disabled?: boolean;
+    onUpgradeClick?: () => void;
 }
 
 type ExportFormat = "xlsx" | "csv" | "quickbooks" | "xero";
@@ -76,13 +77,28 @@ const columnMappings: Record<string, Record<string, string>> = {
     },
 };
 
-export function ExportButton({ data, disabled }: ExportButtonProps) {
+const PRO_STORAGE_KEY = "freightsnap_pro";
+
+export function ExportButton({ data, disabled, onUpgradeClick }: ExportButtonProps) {
     const [isExporting, setIsExporting] = useState(false);
     const [exportComplete, setExportComplete] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [isPro, setIsPro] = useState(false);
+
+    // Check Pro status on mount and when modal opens
+    useEffect(() => {
+        setIsPro(localStorage.getItem(PRO_STORAGE_KEY) === "true");
+    }, [showModal]);
 
     const handleExport = useCallback(async (format: ExportFormat) => {
         if (!data || data.rows.length === 0 || disabled) return;
+
+        // Check if Pro feature and user doesn't have Pro
+        if ((format === "quickbooks" || format === "xero") && !isPro) {
+            setShowModal(false);
+            onUpgradeClick?.();
+            return;
+        }
 
         setIsExporting(true);
         setShowModal(false);
@@ -138,7 +154,7 @@ export function ExportButton({ data, disabled }: ExportButtonProps) {
         } finally {
             setIsExporting(false);
         }
-    }, [data, disabled]);
+    }, [data, disabled, isPro, onUpgradeClick]);
 
     const rowCount = data?.rows?.length || 0;
 
@@ -217,33 +233,80 @@ export function ExportButton({ data, disabled }: ExportButtonProps) {
 
                                 {/* Format options */}
                                 <div className="space-y-3">
-                                    {formatOptions.map((option) => (
-                                        <motion.button
-                                            key={option.id}
-                                            onClick={() => handleExport(option.id)}
-                                            whileHover={{ scale: 1.02 }}
-                                            whileTap={{ scale: 0.98 }}
-                                            className="w-full p-4 rounded-xl bg-zinc-800/50 border border-zinc-700/50 hover:border-primary/50 hover:bg-zinc-800 transition-all group text-left relative"
-                                        >
-                                            <div className="flex items-center gap-4">
-                                                <div className="p-3 rounded-lg bg-zinc-700/50 group-hover:bg-primary/20 transition-colors">
-                                                    <option.icon className="w-5 h-5 text-zinc-400 group-hover:text-primary transition-colors" />
-                                                </div>
-                                                <div className="flex-1">
-                                                    <div className="flex items-center gap-2">
-                                                        <p className="font-medium text-zinc-100">{option.name}</p>
-                                                        {option.pro && (
-                                                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/20 text-primary font-medium">
-                                                                PRO
-                                                            </span>
+                                    {formatOptions.map((option) => {
+                                        const isLocked = option.pro && !isPro;
+
+                                        return (
+                                            <motion.button
+                                                key={option.id}
+                                                onClick={() => handleExport(option.id)}
+                                                whileHover={{ scale: isLocked ? 1 : 1.02 }}
+                                                whileTap={{ scale: isLocked ? 1 : 0.98 }}
+                                                className={cn(
+                                                    "w-full p-4 rounded-xl border transition-all group text-left relative",
+                                                    isLocked
+                                                        ? "bg-zinc-800/30 border-zinc-700/30 cursor-not-allowed"
+                                                        : "bg-zinc-800/50 border-zinc-700/50 hover:border-primary/50 hover:bg-zinc-800"
+                                                )}
+                                            >
+                                                <div className="flex items-center gap-4">
+                                                    <div className={cn(
+                                                        "p-3 rounded-lg transition-colors",
+                                                        isLocked
+                                                            ? "bg-zinc-700/30"
+                                                            : "bg-zinc-700/50 group-hover:bg-primary/20"
+                                                    )}>
+                                                        {isLocked ? (
+                                                            <Lock className="w-5 h-5 text-zinc-500" />
+                                                        ) : (
+                                                            <option.icon className={cn(
+                                                                "w-5 h-5 transition-colors",
+                                                                isLocked ? "text-zinc-500" : "text-zinc-400 group-hover:text-primary"
+                                                            )} />
                                                         )}
                                                     </div>
-                                                    <p className="text-sm text-zinc-500">{option.description}</p>
+                                                    <div className="flex-1">
+                                                        <div className="flex items-center gap-2">
+                                                            <p className={cn(
+                                                                "font-medium",
+                                                                isLocked ? "text-zinc-500" : "text-zinc-100"
+                                                            )}>
+                                                                {option.name}
+                                                            </p>
+                                                            {option.pro && (
+                                                                <span className={cn(
+                                                                    "text-[10px] px-1.5 py-0.5 rounded font-medium flex items-center gap-1",
+                                                                    isPro
+                                                                        ? "bg-amber-500/20 text-amber-400"
+                                                                        : "bg-zinc-700 text-zinc-400"
+                                                                )}>
+                                                                    <Crown className="w-2.5 h-2.5" />
+                                                                    PRO
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                        <p className={cn(
+                                                            "text-sm",
+                                                            isLocked ? "text-zinc-600" : "text-zinc-500"
+                                                        )}>
+                                                            {isLocked ? "Upgrade to unlock" : option.description}
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </motion.button>
-                                    ))}
+                                            </motion.button>
+                                        );
+                                    })}
                                 </div>
+
+                                {/* Upgrade prompt for non-Pro users */}
+                                {!isPro && (
+                                    <div className="mt-4 pt-4 border-t border-zinc-700/50 text-center">
+                                        <p className="text-sm text-zinc-500">
+                                            Unlock Pro exports for just{" "}
+                                            <span className="text-zinc-300 font-medium">$29</span>
+                                        </p>
+                                    </div>
+                                )}
                             </div>
                         </motion.div>
                     </>
