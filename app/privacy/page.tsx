@@ -146,7 +146,20 @@ export default function PrivacyPage() {
                                 </section>
 
                                 <section>
-                                    <h2 className="text-xl font-semibold text-zinc-100 mb-4">8. Your Rights</h2>
+                                    <h2 className="text-xl font-semibold text-zinc-100 mb-4">8. Payments & Licensing</h2>
+                                    <p>
+                                        We use <a href="https://gumroad.com" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Gumroad</a> to process Pro license purchases.
+                                        Gumroad handles all payment information - we never see or store your credit card details.
+                                    </p>
+                                    <p className="mt-2">
+                                        When you purchase a Pro license, you receive a unique license key via email.
+                                        This key is stored in your browser&apos;s local storage to remember your Pro status.
+                                        If you clear your cache, simply re-enter the key from your purchase email.
+                                    </p>
+                                </section>
+
+                                <section>
+                                    <h2 className="text-xl font-semibold text-zinc-100 mb-4">9. Your Rights</h2>
                                     <p>You have the right to:</p>
                                     <ul className="list-disc list-inside space-y-2 mt-2">
                                         <li>Know what data we collect (this policy)</li>
@@ -156,7 +169,16 @@ export default function PrivacyPage() {
                                 </section>
 
                                 <section>
-                                    <h2 className="text-xl font-semibold text-zinc-100 mb-4">9. Children&apos;s Privacy</h2>
+                                    <h2 className="text-xl font-semibold text-zinc-100 mb-4">10. Refund Policy</h2>
+                                    <p>
+                                        Refunds are available for valid reasons (e.g., the product doesn&apos;t work as advertised,
+                                        technical issues we cannot resolve). Contact us via Gumroad with your reason and
+                                        we&apos;ll process your request promptly.
+                                    </p>
+                                </section>
+
+                                <section>
+                                    <h2 className="text-xl font-semibold text-zinc-100 mb-4">11. Children&apos;s Privacy</h2>
                                     <p>
                                         FreightSnap is not intended for use by children under 13 years of age. We do not
                                         knowingly collect personal information from children.
@@ -164,7 +186,7 @@ export default function PrivacyPage() {
                                 </section>
 
                                 <section>
-                                    <h2 className="text-xl font-semibold text-zinc-100 mb-4">10. Changes to This Policy</h2>
+                                    <h2 className="text-xl font-semibold text-zinc-100 mb-4">12. Changes to This Policy</h2>
                                     <p>
                                         We may update this Privacy Policy from time to time. We will notify you of any
                                         changes by posting the new Privacy Policy on this page and updating the
@@ -173,7 +195,7 @@ export default function PrivacyPage() {
                                 </section>
 
                                 <section>
-                                    <h2 className="text-xl font-semibold text-zinc-100 mb-4">11. Contact Us</h2>
+                                    <h2 className="text-xl font-semibold text-zinc-100 mb-4">13. Contact Us</h2>
                                     <p>
                                         If you have any questions about this Privacy Policy, please contact us at:
                                     </p>

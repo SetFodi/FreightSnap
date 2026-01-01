@@ -11,7 +11,7 @@ interface GumroadResponse {
 }
 
 const PRODUCT_ID = "3Caa9prCBLnt-IVumId2tA==";
-const MAX_USES = 3; // Maximum number of devices/activations allowed
+const MAX_USES = 20; // Allow 20 activations - catches pirates, doesn't hurt real users
 
 export async function verifyGumroadLicense(licenseKey: string): Promise<{
     success: boolean;

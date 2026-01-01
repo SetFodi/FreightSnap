@@ -236,6 +236,85 @@ export default function AboutPage() {
                     </motion.div>
                 </section>
 
+                {/* Pro License Section */}
+                <section className="container mx-auto px-6 pb-16">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.7 }}
+                        className="max-w-3xl mx-auto"
+                    >
+                        <GlassContainer className="p-8">
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
+                                    <Cloud className="w-6 h-6 text-amber-500" />
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl font-bold text-zinc-100">
+                                        Pro License FAQ
+                                    </h2>
+                                    <p className="text-zinc-400">
+                                        How our payment and licensing works
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="space-y-6">
+                                <div>
+                                    <h3 className="font-semibold text-zinc-100 mb-2">How do I buy Pro?</h3>
+                                    <p className="text-sm text-zinc-400">
+                                        Click &quot;Upgrade&quot; in the app or visit our{" "}
+                                        <a href="https://freightsnap.gumroad.com/l/uygsqg/andromeda" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                            Gumroad page
+                                        </a>
+                                        . Pay once ($20 with launch discount), and you&apos;ll receive a license key via email.
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <h3 className="font-semibold text-zinc-100 mb-2">How do I activate my license?</h3>
+                                    <p className="text-sm text-zinc-400">
+                                        After purchase, click &quot;Upgrade&quot; on the main page and paste your license key.
+                                        That&apos;s it - you&apos;re Pro forever!
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <h3 className="font-semibold text-zinc-100 mb-2">What if I clear my browser cache?</h3>
+                                    <p className="text-sm text-zinc-400">
+                                        No problem! Just re-enter your license key from the purchase email.
+                                        Your key never expires - you can use it anytime.
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <h3 className="font-semibold text-zinc-100 mb-2">Can I use Pro on multiple devices?</h3>
+                                    <p className="text-sm text-zinc-400">
+                                        Yes! You can activate on your work computer, home laptop, and more.
+                                        Just enter the same license key on each device.
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <h3 className="font-semibold text-zinc-100 mb-2">Is there a refund policy?</h3>
+                                    <p className="text-sm text-zinc-400">
+                                        Refunds are available for valid reasons (technical issues, product not working as advertised).
+                                        Contact us via Gumroad and we&apos;ll help you out.
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <h3 className="font-semibold text-zinc-100 mb-2">Why Gumroad?</h3>
+                                    <p className="text-sm text-zinc-400">
+                                        Gumroad handles all payment and taxes securely.
+                                        We never see your payment details - only your license key.
+                                    </p>
+                                </div>
+                            </div>
+                        </GlassContainer>
+                    </motion.div>
+                </section>
+
                 {/* Footer */}
                 <footer className="border-t border-zinc-800/50 py-8 text-center">
                     <p className="text-sm text-zinc-500">
