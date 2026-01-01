@@ -1,0 +1,15 @@
+Carrier Name,Container Type,Transit Days,Base Rate (USD),Fuel Surcharge,Total Price (USD),Currency
+Maersk Line,40' Standard,28,2450.00,385.00,2835.00,USD
+Maersk Line,40' High Cube,28,2650.00,385.00,3035.00,USD
+MSC Mediterranean,40' Standard,32,2180.00,420.00,2600.00,USD
+MSC Mediterranean,40' High Cube,32,2380.00,420.00,2800.00,USD
+CMA CGM,40' Standard,30,2320.00,395.00,2715.00,USD
+CMA CGM,40' High Cube,30,2520.00,395.00,2915.00,USD
+Hapag-Lloyd,40' Standard,26,2580.00,410.00,2990.00,USD
+Hapag-Lloyd,40' High Cube,26,2780.00,410.00,3190.00,USD
+COSCO Shipping,40' Standard,35,1980.00,350.00,2330.00,USD
+COSCO Shipping,40' High Cube,35,2180.00,350.00,2530.00,USD
+Evergreen Marine,40' Standard,31,2250.00,375.00,2625.00,USD
+ONE Ocean Network,40' Standard,29,2400.00,390.00,2790.00,USD
+Yang Ming Marine,40' Standard,33,2100.00,365.00,2465.00,USD
+ZIM Integrated,40' Standard,27,2550.00,400.00,2950.00,USD

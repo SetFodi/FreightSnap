@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { Pencil, Check, X, Trash2, Search, TrendingDown } from "lucide-react";
+import { Pencil, Check, X, Trash2, Search, TrendingDown, DollarSign } from "lucide-react";
 import type { ExtractedData } from "@/lib/gemini";
 
 interface DataTableProps {
@@ -26,9 +26,37 @@ interface EditingCell {
     field: string;
 }
 
+// Currency symbols for detection
+const currencyPatterns = [
+    { symbol: "$", code: "USD" },
+    { symbol: "€", code: "EUR" },
+    { symbol: "£", code: "GBP" },
+    { symbol: "₾", code: "GEL" },
+    { symbol: "¥", code: "JPY" },
+    { symbol: "USD", code: "USD" },
+    { symbol: "EUR", code: "EUR" },
+    { symbol: "GBP", code: "GBP" },
+    { symbol: "GEL", code: "GEL" },
+];
+
+// Detect currencies in data
+function detectCurrencies(rows: Record<string, string>[]): string[] {
+    const found = new Set<string>();
+    rows.forEach((row) => {
+        Object.values(row).forEach((val) => {
+            if (!val) return;
+            currencyPatterns.forEach(({ symbol, code }) => {
+                if (val.includes(symbol)) {
+                    found.add(code);
+                }
+            });
+        });
+    });
+    return Array.from(found);
+}
+
 // Find the "price" column and the best (lowest) price row
 function findBestPriceRow(rows: Record<string, string>[], columns: string[]): number | null {
-    // Look for price-like columns
     const priceColumns = columns.filter((col) =>
         /price|rate|amount|total|cost|charge|fee/i.test(col) &&
         !/tax|vat|surcharge/i.test(col)
@@ -44,7 +72,6 @@ function findBestPriceRow(rows: Record<string, string>[], columns: string[]): nu
         const val = row[priceCol];
         if (!val) return;
 
-        // Extract numeric value from string (handles "$1,234.56", "1234 USD", etc.)
         const numericStr = val.replace(/[^0-9.-]/g, "");
         const price = parseFloat(numericStr);
 
@@ -91,7 +118,6 @@ export function DataTable({ data, onUpdateRow, onDeleteRow }: DataTableProps) {
         [saveEdit, cancelEdit]
     );
 
-    // Filter rows based on search query
     const filteredRows = useMemo(() => {
         if (!searchQuery.trim()) return data.rows;
         const query = searchQuery.toLowerCase();
@@ -102,10 +128,13 @@ export function DataTable({ data, onUpdateRow, onDeleteRow }: DataTableProps) {
         );
     }, [data.rows, searchQuery]);
 
-    // Find best price row
     const bestPriceRow = useMemo(() => {
         return findBestPriceRow(data.rows, data.columns);
     }, [data.rows, data.columns]);
+
+    const detectedCurrencies = useMemo(() => {
+        return detectCurrencies(data.rows);
+    }, [data.rows]);
 
     if (!data.rows || data.rows.length === 0) {
         return null;
@@ -125,7 +154,6 @@ export function DataTable({ data, onUpdateRow, onDeleteRow }: DataTableProps) {
             transition={{ duration: 0.4, delay: 0.1 }}
             className="space-y-4"
         >
-            {/* Header with document info */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h3 className="text-lg font-semibold text-zinc-100">
@@ -137,7 +165,6 @@ export function DataTable({ data, onUpdateRow, onDeleteRow }: DataTableProps) {
                     </p>
                 </div>
 
-                {/* Search */}
                 <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
                     <Input
@@ -149,32 +176,34 @@ export function DataTable({ data, onUpdateRow, onDeleteRow }: DataTableProps) {
                 </div>
             </div>
 
-            {/* Row count and best price indicator */}
-            <div className="flex items-center justify-between text-sm">
-                <div className="flex items-center gap-4">
-                    <span className="text-zinc-400">
-                        Showing {filteredRows.length} of {data.rows.length} rows • {columns.length} columns
+            {/* Stats row */}
+            <div className="flex flex-wrap items-center gap-3 text-sm">
+                <span className="text-zinc-400">
+                    Showing {filteredRows.length} of {data.rows.length} rows • {columns.length} columns
+                </span>
+                {bestPriceRow !== null && (
+                    <span className="flex items-center gap-1 text-green-400 text-xs px-2 py-1 rounded-full bg-green-500/10 border border-green-500/20">
+                        <TrendingDown className="w-3 h-3" />
+                        Best price highlighted
                     </span>
-                    {bestPriceRow !== null && (
-                        <span className="flex items-center gap-1 text-green-400 text-xs px-2 py-1 rounded-full bg-green-500/10 border border-green-500/20">
-                            <TrendingDown className="w-3 h-3" />
-                            Best price highlighted
-                        </span>
-                    )}
-                </div>
+                )}
+                {detectedCurrencies.length > 0 && (
+                    <span className="flex items-center gap-1 text-blue-400 text-xs px-2 py-1 rounded-full bg-blue-500/10 border border-blue-500/20">
+                        <DollarSign className="w-3 h-3" />
+                        {detectedCurrencies.join(", ")} detected
+                    </span>
+                )}
                 {hasMoreColumns && (
-                    <span className="text-xs text-zinc-500">Scroll right for more →</span>
+                    <span className="text-xs text-zinc-500 ml-auto">Scroll right for more →</span>
                 )}
             </div>
 
-            {/* Summary */}
             {data.summary?.key_info && (
                 <div className="p-3 rounded-lg bg-zinc-800/50 border border-zinc-700/50">
                     <p className="text-sm text-zinc-300">{data.summary.key_info}</p>
                 </div>
             )}
 
-            {/* Scrollable table container */}
             <div className="overflow-x-auto rounded-lg border border-zinc-700/50">
                 <Table>
                     <TableHeader>
@@ -190,7 +219,6 @@ export function DataTable({ data, onUpdateRow, onDeleteRow }: DataTableProps) {
                     <TableBody>
                         <AnimatePresence mode="popLayout">
                             {filteredRows.map((row, rowIndex) => {
-                                // Find original index for best price comparison
                                 const originalIndex = data.rows.indexOf(row);
                                 const isBestPrice = originalIndex === bestPriceRow;
 
@@ -274,7 +302,6 @@ export function DataTable({ data, onUpdateRow, onDeleteRow }: DataTableProps) {
                 </Table>
             </div>
 
-            {/* No results message */}
             {filteredRows.length === 0 && searchQuery && (
                 <div className="text-center py-8 text-zinc-500">
                     No rows match &quot;{searchQuery}&quot;

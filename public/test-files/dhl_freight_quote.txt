@@ -1,0 +1,105 @@
+================================================================================
+                            DHL EXPRESS FREIGHT QUOTE
+================================================================================
+
+Quote Reference: DHL-QT-2024-78901
+Date Issued: December 29, 2024
+Valid Until: January 10, 2025
+
+--------------------------------------------------------------------------------
+SHIPPER INFORMATION
+--------------------------------------------------------------------------------
+Company:        TechCorp Industries
+Address:        1234 Innovation Drive, San Jose, CA 95134, USA
+Contact:        John Smith
+Email:          john.smith@techcorp.com
+Phone:          +1 (408) 555-0123
+
+--------------------------------------------------------------------------------
+CONSIGNEE INFORMATION
+--------------------------------------------------------------------------------
+Company:        European Distribution GmbH
+Address:        Industriestrasse 45, 60329 Frankfurt, Germany
+Contact:        Hans Mueller
+Email:          h.mueller@europdist.de
+Phone:          +49 69 555 0456
+
+================================================================================
+                              SHIPPING OPTIONS
+================================================================================
+
+| Service Level      | Transit   | Price (USD) | Price (EUR) | Notes              |
+|--------------------|-----------|-------------|-------------|---------------------|
+| Express Worldwide  | 2-3 days  | $1,245.00   | €1,142.00   | Door-to-door        |
+| Express 12:00      | 2 days    | $1,680.00   | €1,540.00   | Before noon delivery|
+| Express 9:00       | 2 days    | $2,150.00   | €1,972.00   | Before 9am delivery |
+| Economy Select     | 5-7 days  | $685.00     | €628.00     | Cost-effective      |
+| Freight LTL        | 7-10 days | $425.00     | €390.00     | > 70kg shipments    |
+
+================================================================================
+                              SHIPMENT DETAILS
+================================================================================
+
+Pieces:             4 pallets
+Total Weight:       485.5 kg (gross)
+Volumetric Weight:  520.0 kg
+Chargeable Weight:  520.0 kg (higher of actual/volumetric)
+
+Dimensions:
+  Pallet 1:  120 x 80 x 150 cm  (145 kg)
+  Pallet 2:  120 x 80 x 120 cm  (125 kg)
+  Pallet 3:  100 x 80 x 100 cm  (115 kg)
+  Pallet 4:  100 x 80 x 80 cm   (100.5 kg)
+
+Commodity:          Electronic Equipment (Computer Servers)
+HS Code:            8471.50.00
+Declared Value:     $45,000 USD
+
+================================================================================
+                              ADDITIONAL CHARGES
+================================================================================
+
+| Description                          | Amount (USD)  |
+|--------------------------------------|---------------|
+| Fuel Surcharge (17.5%)               | $217.88       |
+| Security Surcharge                   | $35.00        |
+| Remote Area Surcharge                | $0.00         |
+| Oversize Handling (per pallet)       | $45.00 x 4    |
+| Insurance (0.5% of declared value)   | $225.00       |
+| Customs Clearance                    | $95.00        |
+| Documentation Fee                    | $25.00        |
+|--------------------------------------|---------------|
+| SUBTOTAL SURCHARGES                  | $777.88       |
+
+================================================================================
+                              QUOTE SUMMARY
+================================================================================
+
+Based on Economy Select service:
+
+  Base Rate:                            $685.00
+  Fuel Surcharge:                       $119.88
+  Additional Charges:                   $580.00
+  ----------------------------------------
+  SUBTOTAL:                             $1,384.88
+  
+  Import Duties (estimated):            $450.00
+  VAT (19% on goods + duties):          $8,635.50
+  ----------------------------------------
+  ESTIMATED TOTAL LANDED COST:          $10,470.38
+
+================================================================================
+                              TERMS & CONDITIONS
+================================================================================
+
+1. Rates are subject to fuel surcharge adjustments
+2. Customs duties and taxes are estimates only
+3. Delivery times are estimates and not guaranteed
+4. Insurance covers up to declared value only
+5. Dangerous goods may incur additional charges
+
+For questions, contact: quotes@dhl.com or call 1-800-DHL-SHIP
+
+================================================================================
+                    Thank you for choosing DHL Express!
+================================================================================

@@ -9,6 +9,7 @@ import { ExportButton } from "@/components/export-button";
 import { GlassContainer } from "@/components/glass-container";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/toast";
+import { UsageBadge, incrementUsage, canProcessFile } from "@/components/usage-badge";
 import { parseDocument } from "@/app/actions/parse-pdf";
 import { Zap, FileSpreadsheet, Sparkles, Trash2 } from "lucide-react";
 import type { ExtractedData } from "@/lib/gemini";
@@ -20,6 +21,19 @@ export default function HomePage() {
     const { addToast } = useToast();
 
     const processFile = useCallback(async (uploadedFile: UploadedFile) => {
+        // Check usage limit
+        if (!canProcessFile()) {
+            setFiles((prev) =>
+                prev.map((f) =>
+                    f.id === uploadedFile.id
+                        ? { ...f, status: "error" as const, errorMessage: "Daily limit reached. Upgrade for unlimited." }
+                        : f
+                )
+            );
+            addToast("error", "Daily limit reached. Upgrade to Pro for unlimited files.");
+            return;
+        }
+
         setFiles((prev) =>
             prev.map((f) =>
                 f.id === uploadedFile.id ? { ...f, status: "reading" as const } : f
@@ -40,6 +54,8 @@ export default function HomePage() {
         const result = await parseDocument(formData);
 
         if (result.success && result.data) {
+            incrementUsage(); // Track successful processing
+
             setExtractedData((prev) => {
                 if (!prev) return result.data!;
                 const allColumns = [...new Set([...prev.columns, ...result.data!.columns])];
@@ -138,13 +154,20 @@ export default function HomePage() {
                             <span className="text-xl font-bold gradient-text">FreightSnap</span>
                         </div>
                         <div className="flex items-center gap-4">
+                            <UsageBadge />
                             <Link
                                 href="/about"
                                 className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
                             >
                                 About
                             </Link>
-                            <div className="flex items-center gap-2 text-sm text-zinc-500">
+                            <Link
+                                href="/pricing"
+                                className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
+                            >
+                                Pricing
+                            </Link>
+                            <div className="hidden sm:flex items-center gap-2 text-sm text-zinc-500">
                                 <Sparkles className="w-4 h-4" />
                                 <span>AI-Powered</span>
                             </div>
@@ -165,6 +188,7 @@ export default function HomePage() {
                         </h1>
                         <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
                             Drop PDFs, CSVs, or Excel files. AI extracts all data into clean, editable tables.
+                            <span className="text-green-400"> Best price highlighted automatically.</span>
                         </p>
                     </motion.div>
                 </section>
@@ -225,7 +249,7 @@ export default function HomePage() {
                 </section>
 
                 <footer className="fixed bottom-0 inset-x-0 py-4 text-center text-sm text-zinc-600">
-                    <p>Built with Next.js 15, Tailwind CSS &amp; Groq AI</p>
+                    <p>Built with Next.js 15, Tailwind CSS &amp; Groq AI • 100% Private</p>
                 </footer>
             </div>
         </div>
