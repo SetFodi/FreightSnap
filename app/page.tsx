@@ -7,14 +7,17 @@ import { Dropzone, type UploadedFile } from "@/components/dropzone";
 import { DataTable } from "@/components/data-table";
 import { ExportButton } from "@/components/export-button";
 import { GlassContainer } from "@/components/glass-container";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/toast";
 import { parseDocument } from "@/app/actions/parse-pdf";
-import { Zap, FileSpreadsheet, Sparkles } from "lucide-react";
+import { Zap, FileSpreadsheet, Sparkles, Trash2 } from "lucide-react";
 import type { ExtractedData } from "@/lib/gemini";
 
 export default function HomePage() {
     const [files, setFiles] = useState<UploadedFile[]>([]);
     const [extractedData, setExtractedData] = useState<ExtractedData | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
+    const { addToast } = useToast();
 
     const processFile = useCallback(async (uploadedFile: UploadedFile) => {
         setFiles((prev) =>
@@ -57,6 +60,8 @@ export default function HomePage() {
                     f.id === uploadedFile.id ? { ...f, status: "done" as const } : f
                 )
             );
+
+            addToast("success", `Extracted ${result.data.rows.length} rows from ${uploadedFile.file.name}`);
         } else {
             setFiles((prev) =>
                 prev.map((f) =>
@@ -65,8 +70,9 @@ export default function HomePage() {
                         : f
                 )
             );
+            addToast("error", result.error || "Failed to process file");
         }
-    }, []);
+    }, [addToast]);
 
     const handleFilesAdded = useCallback(
         async (newFiles: File[]) => {
@@ -108,6 +114,12 @@ export default function HomePage() {
             return { ...prev, rows: newRows, summary: { ...prev.summary, total_rows: newRows.length } };
         });
     }, []);
+
+    const handleClearAll = useCallback(() => {
+        setFiles([]);
+        setExtractedData(null);
+        addToast("info", "All data cleared");
+    }, [addToast]);
 
     return (
         <div className="min-h-screen bg-background">
@@ -188,11 +200,22 @@ export default function HomePage() {
                                     transition={{ delay: 0.3 }}
                                     className="flex items-center justify-between pt-4 border-t border-zinc-700/50"
                                 >
-                                    <div className="flex items-center gap-2 text-zinc-400">
-                                        <FileSpreadsheet className="w-4 h-4" />
-                                        <span className="text-sm">
-                                            Ready to export {extractedData.rows.length} rows
-                                        </span>
+                                    <div className="flex items-center gap-4">
+                                        <div className="flex items-center gap-2 text-zinc-400">
+                                            <FileSpreadsheet className="w-4 h-4" />
+                                            <span className="text-sm">
+                                                Ready to export {extractedData.rows.length} rows
+                                            </span>
+                                        </div>
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            onClick={handleClearAll}
+                                            className="text-zinc-500 hover:text-zinc-300"
+                                        >
+                                            <Trash2 className="w-4 h-4 mr-1" />
+                                            Clear All
+                                        </Button>
                                     </div>
                                     <ExportButton data={extractedData} disabled={isProcessing} />
                                 </motion.div>
