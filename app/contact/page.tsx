@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GlassContainer } from "@/components/glass-container";
 import { cn } from "@/lib/utils";
+import { sendContactEmail } from "@/app/actions/send-email";
+import { Loader2 } from "lucide-react";
 
 type ContactReason = "technical" | "billing" | "feature" | "other";
 
@@ -31,16 +33,26 @@ export default function ContactPage() {
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState("");
     const [submitted, setSubmitted] = useState(false);
+    const [isSending, setIsSending] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Open email client with pre-filled info
-        const subject = encodeURIComponent(`[FreightSnap] ${reasons.find(r => r.id === selectedReason)?.label || "Contact"}`);
-        const body = encodeURIComponent(`From: ${email}\n\nReason: ${reasons.find(r => r.id === selectedReason)?.label}\n\n${message}`);
-        window.location.href = `mailto:lukafartenadze2004@gmail.com?subject=${subject}&body=${body}`;
+        setIsSending(true);
 
-        setSubmitted(true);
+        const result = await sendContactEmail({
+            email,
+            reason: reasons.find(r => r.id === selectedReason)?.label || "Inquiry",
+            message
+        });
+
+        setIsSending(false);
+
+        if (result.success) {
+            setSubmitted(true);
+        } else {
+            alert(result.error);
+        }
     };
 
     const isValid = selectedReason && email.trim() && message.trim();
@@ -83,18 +95,16 @@ export default function ContactPage() {
                                     <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-500/20 flex items-center justify-center">
                                         <CheckCircle className="w-8 h-8 text-green-400" />
                                     </div>
-                                    <h2 className="text-xl font-bold text-zinc-100 mb-2">Email Client Opened!</h2>
+                                    <h2 className="text-xl font-bold text-zinc-100 mb-2">Message Sent!</h2>
                                     <p className="text-zinc-400 mb-6">
-                                        Your email client should have opened with your message. If not, you can email us directly at:
+                                        Thanks for reaching out. We&apos;ll get back to you at <span className="text-zinc-100 font-medium">{email}</span> as soon as possible.
                                     </p>
-                                    <a
-                                        href="mailto:lukafartenadze2004@gmail.com"
-                                        className="text-primary hover:underline font-medium"
-                                    >
-                                        lukafartenadze2004@gmail.com
-                                    </a>
                                     <div className="mt-8">
-                                        <Button variant="outline" onClick={() => setSubmitted(false)}>
+                                        <Button variant="outline" onClick={() => {
+                                            setSubmitted(false);
+                                            setMessage("");
+                                            setSelectedReason(null);
+                                        }}>
                                             Send Another Message
                                         </Button>
                                     </div>
@@ -168,12 +178,21 @@ export default function ContactPage() {
                                     {/* Submit */}
                                     <Button
                                         type="submit"
-                                        disabled={!isValid}
+                                        disabled={!isValid || isSending}
                                         className="w-full"
                                         size="lg"
                                     >
-                                        <Send className="w-4 h-4 mr-2" />
-                                        Send Message
+                                        {isSending ? (
+                                            <>
+                                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                                Sending...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Send className="w-4 h-4 mr-2" />
+                                                Send Message
+                                            </>
+                                        )}
                                     </Button>
                                 </form>
                             </GlassContainer>
