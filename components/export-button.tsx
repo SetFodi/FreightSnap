@@ -14,7 +14,7 @@ interface ExportButtonProps {
     onUpgradeClick?: () => void;
 }
 
-type ExportFormat = "xlsx" | "csv" | "quickbooks" | "xero";
+type ExportFormat = "xlsx" | "csv" | "quickbooks" | "odoo";
 
 interface FormatOption {
     id: ExportFormat;
@@ -45,9 +45,9 @@ const formatOptions: FormatOption[] = [
         pro: true,
     },
     {
-        id: "xero",
-        name: "Xero Format",
-        description: "Ready to import into Xero",
+        id: "odoo",
+        name: "Odoo Format",
+        description: "Ready to import into Odoo",
         icon: Building2,
         pro: true,
     },
@@ -65,15 +65,15 @@ const columnMappings: Record<string, Record<string, string>> = {
         invoice_final_nbr: "RefNumber",
         event_perform_from: "Date",
     },
-    xero: {
-        event_type_id: "ItemCode",
-        event_entity_id: "Description",
-        amount: "UnitAmount",
-        rate_billed: "LineAmount",
-        quantity_billed: "Quantity",
-        description: "AccountCode",
-        invoice_final_nbr: "InvoiceNumber",
-        event_perform_from: "InvoiceDate",
+    odoo: {
+        event_type_id: "product_id",
+        event_entity_id: "name",
+        amount: "price_unit",
+        rate_billed: "price_subtotal",
+        quantity_billed: "quantity",
+        description: "display_name",
+        invoice_final_nbr: "move_name",
+        event_perform_from: "invoice_date",
     },
 };
 
@@ -94,7 +94,7 @@ export function ExportButton({ data, disabled, onUpgradeClick }: ExportButtonPro
         if (!data || data.rows.length === 0 || disabled) return;
 
         // Check if Pro feature and user doesn't have Pro
-        if ((format === "quickbooks" || format === "xero") && !isPro) {
+        if ((format === "quickbooks" || format === "odoo") && !isPro) {
             setShowModal(false);
             onUpgradeClick?.();
             return;
@@ -109,7 +109,7 @@ export function ExportButton({ data, disabled, onUpgradeClick }: ExportButtonPro
             let exportColumns = data.columns;
 
             // Apply column mappings for accounting software
-            if (format === "quickbooks" || format === "xero") {
+            if (format === "quickbooks" || format === "odoo") {
                 const mapping = columnMappings[format];
                 exportRows = data.rows.map((row) => {
                     const newRow: Record<string, string> = {};
@@ -139,7 +139,7 @@ export function ExportButton({ data, disabled, onUpgradeClick }: ExportButtonPro
             XLSX.utils.book_append_sheet(workbook, worksheet, "Extracted Data");
 
             const date = new Date().toISOString().split("T")[0];
-            const formatSuffix = format === "quickbooks" ? "_QB" : format === "xero" ? "_Xero" : "";
+            const formatSuffix = format === "quickbooks" ? "_QB" : format === "odoo" ? "_Odoo" : "";
 
             if (format === "csv") {
                 XLSX.writeFile(workbook, `FreightSnap${formatSuffix}_${date}.csv`, { bookType: "csv" });

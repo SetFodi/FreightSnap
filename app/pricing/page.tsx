@@ -37,9 +37,10 @@ const plans = [
         description: "Pay once, use forever",
         features: [
             "Everything in Free",
-            "Unlimited file processing",
-            "QuickBooks export",
-            "Xero export",
+            "500 parsings/month (Fair Use)",
+            "QuickBooks & Odoo export",
+            "Currency conversion (Coming Soon)",
+            "Best price auto-highlighter",
             "Priority processing",
             "Lifetime updates",
         ],
