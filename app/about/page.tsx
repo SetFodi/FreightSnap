@@ -247,21 +247,21 @@ export default function AboutPage() {
 
                             <div className="space-y-6">
                                 <div>
-                                    <h3 className="font-semibold text-zinc-100 mb-2">How do I buy Pro?</h3>
+                                    <h3 className="font-semibold text-zinc-100 mb-2">How do I subscribe to Pro?</h3>
                                     <p className="text-sm text-zinc-400">
                                         Click &quot;Upgrade&quot; in the app or visit our{" "}
-                                        <a href="https://freightsnap.gumroad.com/l/uygsqg/andromeda" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                                            Gumroad page
+                                        <a href="/pricing" className="text-primary hover:underline">
+                                            pricing page
                                         </a>
-                                        . Pay once ($20 with launch discount), and you&apos;ll receive a license key via email.
+                                        . Subscribe for $9/month (cancel anytime), and you&apos;ll receive a license key via email.
                                     </p>
                                 </div>
 
                                 <div>
                                     <h3 className="font-semibold text-zinc-100 mb-2">How do I activate my license?</h3>
                                     <p className="text-sm text-zinc-400">
-                                        After purchase, click &quot;Upgrade&quot; on the main page and paste your license key.
-                                        That&apos;s it - you&apos;re Pro forever!
+                                        After subscribing, click &quot;Upgrade&quot; on the main page and paste your license key.
+                                        You&apos;ll have Pro access as long as your subscription is active.
                                     </p>
                                 </div>
 

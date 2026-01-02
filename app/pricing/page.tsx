@@ -111,35 +111,15 @@ export default function PricingPage() {
                                 Simple, <span className="gradient-text">Transparent</span> Pricing
                             </h1>
                             <p className="text-lg text-zinc-400 max-w-2xl mx-auto mb-6">
-                                Start free. Upgrade when you need more power. No subscriptions.
+                                Start free. Upgrade when you need more power.
                             </p>
 
-                            {/* Discount Banner */}
-                            <motion.div
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-                                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30"
-                            >
-                                <motion.div
-                                    animate={{ rotate: [0, 10, -10, 0] }}
-                                    transition={{ repeat: Infinity, duration: 2, repeatDelay: 3 }}
-                                >
-                                    <Sparkles className="w-4 h-4 text-green-400" />
-                                </motion.div>
-                                <span className="text-sm text-green-300">
-                                    Launch offer: <span className="font-bold">Save $9</span> with code{" "}
-                                    <code className="px-1.5 py-0.5 rounded bg-green-500/20 text-green-200 font-mono text-xs">
-                                        ANDROMEDA
-                                    </code>
-                                </span>
-                            </motion.div>
                         </motion.div>
                     </section>
 
                     {/* Pricing Cards */}
                     <section className="container mx-auto px-6 pb-24">
-                        <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+                        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
                             {plans.map((plan, index) => (
                                 <motion.div
                                     key={plan.name}
@@ -247,8 +227,8 @@ export default function PricingPage() {
                                     a: "Yes. Files are processed in memory and immediately discarded. We use Groq API which does NOT train on your data.",
                                 },
                                 {
-                                    q: "What does 'Lifetime' mean?",
-                                    a: "Pay once, use forever. No monthly fees, no subscriptions. All future updates included.",
+                                    q: "Can I cancel my subscription?",
+                                    a: "Yes! Cancel anytime from your Gumroad account. No questions asked.",
                                 },
                                 {
                                     q: "What file formats are supported?",
