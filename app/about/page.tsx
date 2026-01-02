@@ -14,6 +14,8 @@ import {
     Cloud,
     Server
 } from "lucide-react";
+import Image from "next/image";
+import { Navbar } from "@/components/navbar";
 import { GlassContainer } from "@/components/glass-container";
 
 const features = [
@@ -65,27 +67,11 @@ export default function AboutPage() {
             <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
 
             <div className="relative z-10">
-                {/* Header */}
-                <header className="border-b border-zinc-800/50 bg-zinc-950/50 backdrop-blur-xl">
-                    <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-                        <Link href="/" className="flex items-center gap-3 group">
-                            <div className="p-2 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20">
-                                <Package className="w-5 h-5 text-primary" />
-                            </div>
-                            <span className="text-xl font-bold gradient-text">FreightSnap</span>
-                        </Link>
-                        <Link
-                            href="/"
-                            className="flex items-center gap-2 text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
-                        >
-                            <ArrowLeft className="w-4 h-4" />
-                            Back to App
-                        </Link>
-                    </div>
-                </header>
+                {/* Navbar */}
+                <Navbar />
 
                 {/* Hero */}
-                <section className="container mx-auto px-6 py-16 text-center">
+                <section className="container mx-auto px-6 pt-32 pb-16 text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}

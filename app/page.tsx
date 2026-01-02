@@ -12,7 +12,9 @@ import { useToast } from "@/components/toast";
 import { UsageBadge, incrementUsage, canProcessFile } from "@/components/usage-badge";
 import { LicenseModal, useProStatus, ProBadge } from "@/components/license-modal";
 import { parseDocument } from "@/app/actions/parse-pdf";
-import { Package, FileSpreadsheet, Sparkles, Trash2, Crown } from "lucide-react";
+import Image from "next/image";
+import { FileSpreadsheet, Sparkles, Trash2, Crown } from "lucide-react";
+import { Navbar } from "@/components/navbar";
 import type { ExtractedData } from "@/lib/gemini";
 
 export default function HomePage() {
@@ -146,53 +148,17 @@ export default function HomePage() {
             <div className="fixed inset-0 bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950" />
             <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
 
-            <div className="relative z-10">
-                {/* Header */}
-                <header className="border-b border-zinc-800/50 bg-zinc-950/50 backdrop-blur-xl">
-                    <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                            <div className="p-2 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20">
-                                <Package className="w-5 h-5 text-primary" />
-                            </div>
-                            <span className="text-xl font-bold gradient-text">FreightSnap</span>
-                            {isPro && <ProBadge />}
-                        </div>
-                        <div className="flex items-center gap-4">
-                            {!isPro && <UsageBadge />}
-                            {!isPro && (
-                                <button
-                                    onClick={() => setShowLicenseModal(true)}
-                                    className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30 text-amber-400 text-xs font-medium hover:from-amber-500/30 hover:to-orange-500/30 transition-colors"
-                                >
-                                    <Crown className="w-3.5 h-3.5" />
-                                    Upgrade
-                                </button>
-                            )}
-                            <Link
-                                href="/about"
-                                className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
-                            >
-                                About
-                            </Link>
-                            <Link
-                                href="/pricing"
-                                className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
-                            >
-                                Pricing
-                            </Link>
-                            <Link
-                                href="/privacy"
-                                className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
-                            >
-                                Privacy
-                            </Link>
-                            <div className="hidden sm:flex items-center gap-2 text-sm text-zinc-500">
-                                <Sparkles className="w-4 h-4" />
-                                <span>AI-Powered</span>
-                            </div>
-                        </div>
-                    </div>
-                </header>
+            {/* Navbar */}
+            <Navbar />
+
+            {/* Main Content triggers LicenseModal too, so we keep the modal here for page interactions */}
+            <LicenseModal isOpen={showLicenseModal} onClose={() => setShowLicenseModal(false)} onSuccess={() => {
+                refreshProStatus();
+                addToast("success", "Welcome to FreightSnap Pro! 🎉");
+            }} />
+
+            <div className="relative z-10 pt-24">
+
 
                 {/* Hero */}
                 <section className="container mx-auto px-6 py-12 text-center">
