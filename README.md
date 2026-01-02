@@ -11,9 +11,10 @@
 - **Multi-Format Support** — PDF, CSV, XLS, XLSX
 - **Best Price Highlighter** — Automatically highlights the lowest price row
 - **Currency Detection** — Detects USD, EUR, GBP, GEL and more
-- **Privacy-First** — No data storage, no AI training on your files
+- **Privacy-First** — Zero data retention, memory-only processing
+- **Local-First** — Spreadsheets processed locally in browser/server
+- **Pro Features** — License key system, one-time payment integration
 - **Multi-Export** — Excel, CSV, QuickBooks, Xero formats
-- **Editable Tables** — Fix any extraction errors before export
 
 ## 🚀 Quick Start
 
@@ -38,7 +39,8 @@ Open [http://localhost:3000](http://localhost:3000)
 
 | Variable | Description |
 |----------|-------------|
-| `GROQ_API_KEY` | Required. Get free at [console.groq.com](https://console.groq.com) |
+| `GROQ_API_KEY` | Required for parsing. Get free at [console.groq.com](https://console.groq.com) |
+| `RESEND_API_KEY` | Required for contact form. Get free at [resend.com](https://resend.com) |
 
 ## 📁 Project Structure
 
@@ -47,12 +49,15 @@ Open [http://localhost:3000](http://localhost:3000)
 │   ├── page.tsx          # Main app
 │   ├── about/            # About page
 │   ├── pricing/          # Pricing page
-│   └── actions/          # Server actions (parsing)
+│   ├── contact/          # Contact page
+│   └── actions/
+│       ├── parse-pdf.ts  # Document parsing logic
+│       ├── send-email.ts # Email sending logic
+│       └── verify.ts     # License verification
 ├── components/
+│   ├── navbar.tsx        # Shared navigation
 │   ├── dropzone.tsx      # File upload
-│   ├── data-table.tsx    # Editable table
-│   ├── export-button.tsx # Export modal
-│   └── toast.tsx         # Notifications
+│   └── ...
 ├── lib/
 │   └── gemini.ts         # AI extraction logic
 └── public/
@@ -64,6 +69,8 @@ Open [http://localhost:3000](http://localhost:3000)
 - **Framework:** Next.js 15 (App Router)
 - **Styling:** Tailwind CSS v4, Framer Motion
 - **AI:** Groq (Llama 3.3 70B)
+- **Email:** Resend
+- **Payments:** Gumroad
 - **PDF:** unpdf
 - **Spreadsheets:** xlsx (no AI needed)
 
