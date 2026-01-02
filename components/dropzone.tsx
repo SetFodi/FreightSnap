@@ -60,11 +60,14 @@ export function Dropzone({ onFilesAdded, files, onRemoveFile }: DropzoneProps) {
         onDropRejected: () => setIsDragActive(false),
     });
 
+    // Extract onDrag to avoid conflict with framer-motion props
+    const { onDrag, ...rootProps } = getRootProps();
+
     return (
         <div className="space-y-6">
             {/* Dropzone Area */}
             <motion.div
-                {...getRootProps()}
+                {...(rootProps as any)}
                 data-drag-active={isDragActive}
                 className={cn(
                     "dropzone-magnetic relative flex flex-col items-center justify-center gap-4",

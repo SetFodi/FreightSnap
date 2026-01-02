@@ -53,14 +53,17 @@ export default function HomePage() {
             )
         );
 
+        // Enforce strict usage tracking (count attempt before processing)
+        if (!isPro) {
+            incrementUsage();
+        }
+
         const formData = new FormData();
         formData.append("file", uploadedFile.file);
 
         const result = await parseDocument(formData);
 
         if (result.success && result.data) {
-            if (!isPro) incrementUsage(); // Track usage for non-Pro users
-
             setExtractedData((prev) => {
                 if (!prev) return result.data!;
                 const allColumns = [...new Set([...prev.columns, ...result.data!.columns])];
