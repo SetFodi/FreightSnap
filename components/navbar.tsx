@@ -107,11 +107,6 @@ export function Navbar() {
 
                         {/* Right Actions */}
                         <div className="flex items-center gap-3">
-                            <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-900/50 border border-zinc-800/50 text-xs text-zinc-400">
-                                <Sparkles className="w-3.5 h-3.5 text-primary" />
-                                <span>AI-Powered</span>
-                            </div>
-
                             {!isPro && <UsageBadge />}
 
                             {!isPro && (

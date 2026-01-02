@@ -19,6 +19,7 @@ interface DataTableProps {
     data: ExtractedData;
     onUpdateRow: (rowIndex: number, field: string, value: string) => void;
     onDeleteRow: (rowIndex: number) => void;
+    onClearAll?: () => void;
 }
 
 interface EditingCell {
@@ -84,7 +85,7 @@ function findBestPriceRow(rows: Record<string, string>[], columns: string[]): nu
     return bestRow >= 0 ? bestRow : null;
 }
 
-export function DataTable({ data, onUpdateRow, onDeleteRow }: DataTableProps) {
+export function DataTable({ data, onUpdateRow, onDeleteRow, onClearAll }: DataTableProps) {
     const [editingCell, setEditingCell] = useState<EditingCell | null>(null);
     const [editValue, setEditValue] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
@@ -165,14 +166,25 @@ export function DataTable({ data, onUpdateRow, onDeleteRow }: DataTableProps) {
                     </p>
                 </div>
 
-                <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-                    <Input
-                        placeholder="Search rows..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-9 w-full sm:w-64 h-9"
-                    />
+                <div className="flex items-center gap-2">
+                    <div className="relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                        <Input
+                            placeholder="Search rows..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="pl-9 w-full sm:w-64 h-9"
+                        />
+                    </div>
+                    {onClearAll && (
+                        <button
+                            onClick={onClearAll}
+                            className="flex items-center gap-1.5 px-3 py-2 text-sm text-zinc-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+                        >
+                            <Trash2 className="w-4 h-4" />
+                            <span className="hidden sm:inline">Clear All</span>
+                        </button>
+                    )}
                 </div>
             </div>
 
@@ -213,7 +225,7 @@ export function DataTable({ data, onUpdateRow, onDeleteRow }: DataTableProps) {
                                     {col.replace(/_/g, " ")}
                                 </TableHead>
                             ))}
-                            <TableHead className="w-[60px] sticky right-0 bg-zinc-900"></TableHead>
+                            <TableHead className="w-[50px] sticky right-0 bg-zinc-900/95 backdrop-blur-sm border-l border-zinc-800/50"></TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -283,8 +295,8 @@ export function DataTable({ data, onUpdateRow, onDeleteRow }: DataTableProps) {
                                             );
                                         })}
                                         <TableCell className={cn(
-                                            "sticky right-0 backdrop-blur-sm",
-                                            isBestPrice ? "bg-green-500/10" : "bg-zinc-900/80"
+                                            "sticky right-0 border-l border-zinc-800/50",
+                                            isBestPrice ? "bg-green-950/80 backdrop-blur-sm" : "bg-zinc-900/95 backdrop-blur-sm"
                                         )}>
                                             <button
                                                 onClick={() => onDeleteRow(originalIndex)}

@@ -201,6 +201,7 @@ export default function HomePage() {
                                         data={extractedData}
                                         onUpdateRow={handleUpdateRow}
                                         onDeleteRow={handleDeleteRow}
+                                        onClearAll={handleClearAll}
                                     />
                                 </motion.div>
                             )}
