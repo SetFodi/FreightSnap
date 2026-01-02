@@ -303,7 +303,7 @@ export function ExportButton({ data, disabled, onUpgradeClick }: ExportButtonPro
                                     <div className="mt-4 pt-4 border-t border-zinc-700/50 text-center">
                                         <p className="text-sm text-zinc-500">
                                             Unlock Pro exports for just{" "}
-                                            <span className="text-zinc-300 font-medium">$29</span>
+                                            <span className="text-zinc-300 font-medium">$9/month</span>
                                         </p>
                                     </div>
                                 )}

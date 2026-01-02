@@ -185,12 +185,10 @@ export function LicenseModal({ isOpen, onClose, onSuccess }: LicenseModalProps) 
                                         <p>
                                             Don&apos;t have a license?{" "}
                                             <a
-                                                href="https://freightsnap.gumroad.com/l/uygsqg/andromeda"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
+                                                href="/pricing"
                                                 className="text-primary hover:underline"
                                             >
-                                                Get it here →
+                                                Subscribe here →
                                             </a>
                                         </p>
                                         <p className="text-xs text-zinc-600">

@@ -7,11 +7,14 @@ interface GumroadResponse {
         refunded: boolean;
         chargebacked: boolean;
         email: string;
+        subscription_cancelled_at?: string | null;
+        subscription_failed_at?: string | null;
+        subscription_ended_at?: string | null;
     };
 }
 
-const PRODUCT_ID = "3Caa9prCBLnt-IVumId2tA==";
-const MAX_USES = 20; // Allow 20 activations - catches pirates, doesn't hurt real users
+// The new subscription product permalink
+const PRODUCT_PERMALINK = "freightsnap-pro";
 
 export async function verifyGumroadLicense(licenseKey: string): Promise<{
     success: boolean;
@@ -29,9 +32,8 @@ export async function verifyGumroadLicense(licenseKey: string): Promise<{
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                product_id: PRODUCT_ID,
+                product_permalink: PRODUCT_PERMALINK,
                 license_key: licenseKey.trim(),
-                increment_uses_count: "true", // Count this as +1 activation
             }),
         });
 
@@ -51,13 +53,17 @@ export async function verifyGumroadLicense(licenseKey: string): Promise<{
             return { success: false, error: "This license has been chargebacked" };
         }
 
-        // THE LIMIT CHECK: Max 3 devices
-        if (data.uses && data.uses > MAX_USES) {
-            return {
-                success: false,
-                error: `License limit reached (${MAX_USES} devices max). Contact support to reset.`,
-                uses: data.uses,
-            };
+        // Check for cancelled/failed subscription
+        if (data.purchase?.subscription_cancelled_at) {
+            return { success: false, error: "Your subscription has been cancelled" };
+        }
+
+        if (data.purchase?.subscription_failed_at) {
+            return { success: false, error: "Your subscription payment failed. Please update your payment method." };
+        }
+
+        if (data.purchase?.subscription_ended_at) {
+            return { success: false, error: "Your subscription has ended. Please renew to continue." };
         }
 
         // Success!
