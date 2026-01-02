@@ -44,6 +44,9 @@ export function incrementUsage(): number {
         date: today,
     }));
 
+    // Dispatch custom event for same-tab updates
+    window.dispatchEvent(new Event("freightsnap_usage_updated"));
+
     return newCount;
 }
 
@@ -59,10 +62,15 @@ export function UsageBadge() {
         setMounted(true);
         setUsage(getTodayUsage());
 
-        // Listen for storage changes
+        // Listen for storage changes (cross-tab) AND custom event (same-tab)
         const handleStorage = () => setUsage(getTodayUsage());
         window.addEventListener("storage", handleStorage);
-        return () => window.removeEventListener("storage", handleStorage);
+        window.addEventListener("freightsnap_usage_updated", handleStorage);
+
+        return () => {
+            window.removeEventListener("storage", handleStorage);
+            window.removeEventListener("freightsnap_usage_updated", handleStorage);
+        };
     }, []);
 
     if (!mounted) return null;
@@ -79,10 +87,10 @@ export function UsageBadge() {
         >
             {/* Usage indicator */}
             <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium ${isExhausted
-                    ? "bg-red-500/10 border border-red-500/30 text-red-400"
-                    : isLow
-                        ? "bg-yellow-500/10 border border-yellow-500/30 text-yellow-400"
-                        : "bg-zinc-800/60 border border-zinc-700/50 text-zinc-400"
+                ? "bg-red-500/10 border border-red-500/30 text-red-400"
+                : isLow
+                    ? "bg-yellow-500/10 border border-yellow-500/30 text-yellow-400"
+                    : "bg-zinc-800/60 border border-zinc-700/50 text-zinc-400"
                 }`}>
                 <FileText className="w-3.5 h-3.5" />
                 <span>
