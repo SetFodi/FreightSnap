@@ -171,12 +171,12 @@ export default function HomePage() {
                         transition={{ duration: 0.6 }}
                     >
                         <h1 className="text-4xl md:text-5xl font-bold text-zinc-100 mb-4">
-                            Extract Data from{" "}
-                            <span className="gradient-text">Any Document</span>
+                            Stop Typing Freight Quotes{" "}
+                            <span className="gradient-text">Into Excel</span>
                         </h1>
                         <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-                            Drop PDFs, CSVs, or Excel files. AI extracts all data into clean, editable tables.
-                            <span className="text-green-400"> Best price highlighted automatically.</span>
+                            Drop any freight quote — PDF, CSV, or Excel. AI extracts the data instantly.
+                            <span className="text-green-400"> Cheapest rate highlighted automatically.</span>
                         </p>
                     </motion.div>
                 </section>

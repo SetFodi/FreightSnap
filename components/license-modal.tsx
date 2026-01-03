@@ -181,7 +181,7 @@ export function LicenseModal({ isOpen, onClose, onSuccess }: LicenseModalProps) 
                                     </div>
 
                                     {/* Buy link */}
-                                    <div className="text-center text-sm text-zinc-500 mt-4 space-y-1">
+                                    <div className="text-center text-sm text-zinc-500 mt-4 space-y-2">
                                         <p>
                                             Don&apos;t have a license?{" "}
                                             <a
@@ -191,9 +191,11 @@ export function LicenseModal({ isOpen, onClose, onSuccess }: LicenseModalProps) 
                                                 Subscribe here →
                                             </a>
                                         </p>
-                                        <p className="text-xs text-zinc-600">
-                                            Cleared your cache? Just re-enter your key from the purchase email.
-                                        </p>
+                                        <div className="p-2 rounded-lg bg-zinc-800/50 border border-zinc-700/50">
+                                            <p className="text-xs text-zinc-400">
+                                                💡 <strong>Already subscribed?</strong> Just re-enter your license key from your Gumroad email anytime.
+                                            </p>
+                                        </div>
                                     </div>
                                 </>
                             )}
